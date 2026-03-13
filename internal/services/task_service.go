@@ -63,7 +63,7 @@ func (t *taskService) GetTask(id uint) (*models.Task, error) {
 func (t *taskService) UpdateTask(id uint, req models.TaskUpdateRequest) (*models.Task, error) {
 	task, err := t.taskRepo.GetByID(id)
 	if err != nil {
-		return nil, fmt.Errorf("Task is not found: %s", err)
+		return nil, fmt.Errorf("Task is not found: %w", err)
 	}
 
 	if req.Title != nil {
