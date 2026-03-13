@@ -1,0 +1,63 @@
+package services
+
+import (
+	"todolist-layered/internal/models"
+	"todolist-layered/internal/repository"
+)
+
+type CategoryService interface {
+	GetByID(id uint) (*models.Category, error)
+	List() ([]models.Category, error)
+	Update(id uint, req *models.CategoryUpdateRequest) (*models.Category, error)
+	Create(req *models.CategoryCreateRequest) (*models.Category, error)
+	Delete(id uint) error
+}
+
+type categoryService struct {
+	categoryRepo repository.CategoryRepository
+}
+
+func NewCategoryService(categoryRepo repository.CategoryRepository) CategoryService {
+	return &categoryService{
+		categoryRepo: categoryRepo,
+	}
+}
+
+func (c *categoryService) GetByID(id uint) (*models.Category, error) {
+	return c.categoryRepo.GetByID(id)
+}
+
+func (c *categoryService) List() ([]models.Category, error) {
+	return c.categoryRepo.List()
+}
+
+func (c *categoryService) Update(id uint, req *models.CategoryUpdateRequest) (*models.Category, error) {
+	category, err := c.categoryRepo.GetByID(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if req.Color != nil {
+		category.Color = *req.Color
+	}
+
+	if req.Name != nil {
+		category.Name = *req.Name
+	}
+
+	return category, c.categoryRepo.Update(category)
+}
+
+func (c *categoryService) Create(req *models.CategoryCreateRequest) (*models.Category, error) {
+	category := models.Category{
+		Color: req.Color,
+		Name:  req.Name,
+	}
+
+	return &category, c.categoryRepo.Create(&category)
+}
+
+func (c *categoryService) Delete(id uint) error {
+	return c.categoryRepo.Delete(id)
+}
