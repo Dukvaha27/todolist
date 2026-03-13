@@ -1,15 +1,23 @@
 package config
 
 import (
-    "gorm.io/driver/postgres"
-    "gorm.io/gorm"
+	"os"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func SetupDatabase() *gorm.DB {
-    dsn := "host=localhost user=postgres password=1121 dbname=todolist port=5432 sslmode=disable"
-    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    if err != nil {
-        panic("не удалось подключиться к БД: " + err.Error())
-    }
-    return db
+	godotenv.Load()
+
+	db, err := gorm.Open(
+		postgres.New(postgres.Config{
+			DSN:                  os.Getenv("DB_URI"),
+			PreferSimpleProtocol: true,
+		}), &gorm.Config{})
+	if err != nil {
+		panic("не удалось подключиться к БД: " + err.Error())
+	}
+	return db
 }

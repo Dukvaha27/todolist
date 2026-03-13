@@ -45,6 +45,7 @@ func (h *TaskHandler) Update(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	task, err := h.service.UpdateTask(uint(id), req)

@@ -41,14 +41,18 @@ func (t *taskService) CreateTask(req models.TaskCreateRequest) (*models.Task, er
 
 	if req.CategoryID != nil {
 		_, err := t.categoryRepo.GetByID(*req.CategoryID)
-		if err != nil {
+		if err == nil {
 			taskCreate.CategoryID = req.CategoryID
 		}
 	}
 
-	t.taskRepo.Create(&taskCreate)
+	err := t.taskRepo.Create(&taskCreate)
 
-	task, err := t.taskRepo.GetByID(*req.CategoryID)
+	if err != nil {
+		return nil, err
+	}
+
+	task, err := t.taskRepo.GetByID(taskCreate.ID)
 
 	return task, err
 

@@ -1,7 +1,6 @@
 package transport
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"todolist-layered/internal/models"
@@ -34,8 +33,6 @@ func (c *CategoryHandler) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&req)
 
 	if err != nil {
-
-		fmt.Println("THIS IS ERROR", req)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -56,11 +53,16 @@ func (c *CategoryHandler) Delete(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	err = c.services.Delete(uint(id))
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
+
+	ctx.JSON(http.StatusInternalServerError, "record was deleted successfull")
+
 }

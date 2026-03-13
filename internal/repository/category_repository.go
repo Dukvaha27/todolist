@@ -10,7 +10,7 @@ type CategoryRepository interface {
 	Create(category *models.Category) error
 	GetByID(id uint) (*models.Category, error)
 	List() ([]models.Category, error)
-	Update(category *models.CategoryUpdateRequest) error
+	Update(category *models.Category) error
 	Delete(id uint) error
 }
 
@@ -34,9 +34,9 @@ func (c *gormCategoryRepository) Create(category *models.Category) error {
 func (c *gormCategoryRepository) GetByID(id uint) (*models.Category, error) {
 	category := models.Category{}
 
-	result := c.db.Find(&category, id)
+	result := c.db.First(&category, id)
 
-	if result.Error != nil {
+	if result.Error == gorm.ErrRecordNotFound {
 		return nil, result.Error
 	}
 
@@ -55,7 +55,7 @@ func (c *gormCategoryRepository) List() ([]models.Category, error) {
 	return categories, nil
 }
 
-func (c *gormCategoryRepository) Update(category *models.CategoryUpdateRequest) error {
+func (c *gormCategoryRepository) Update(category *models.Category) error {
 	return c.db.Save(&category).Error
 }
 

@@ -8,7 +8,7 @@ import (
 type CategoryService interface {
 	GetByID(id uint) (*models.Category, error)
 	List() ([]models.Category, error)
-	Update(req *models.CategoryUpdateRequest) (*models.Category, error)
+	Update(id uint, req *models.CategoryUpdateRequest) (*models.Category, error)
 	Create(req *models.CategoryCreateRequest) (*models.Category, error)
 	Delete(id uint) error
 }
@@ -33,8 +33,12 @@ func (c *categoryService) List() ([]models.Category, error) {
 	return c.categoryRepo.List()
 }
 
-func (c *categoryService) Update(req *models.CategoryUpdateRequest) (*models.Category, error) {
-	category := models.Category{}
+func (c *categoryService) Update(id uint, req *models.CategoryUpdateRequest) (*models.Category, error) {
+	category, err := c.categoryRepo.GetByID(id)
+
+	if err != nil {
+		return nil, err
+	}
 
 	if req.Color != nil {
 		category.Color = *req.Color
@@ -44,7 +48,7 @@ func (c *categoryService) Update(req *models.CategoryUpdateRequest) (*models.Cat
 		category.Name = *req.Name
 	}
 
-	return &category, c.categoryRepo.Update(req)
+	return category, c.categoryRepo.Update(category)
 }
 
 func (c *categoryService) Create(req *models.CategoryCreateRequest) (*models.Category, error) {
