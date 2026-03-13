@@ -14,13 +14,11 @@ type CategoryService interface {
 }
 
 type categoryService struct {
-	taskRepo     repository.TaskRepository
 	categoryRepo repository.CategoryRepository
 }
 
-func NewCategoryService(categoryRepo repository.CategoryRepository, taskRepo repository.TaskRepository) CategoryService {
+func NewCategoryService(categoryRepo repository.CategoryRepository) CategoryService {
 	return &categoryService{
-		taskRepo:     taskRepo,
 		categoryRepo: categoryRepo,
 	}
 }

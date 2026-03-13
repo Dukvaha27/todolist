@@ -36,9 +36,11 @@ func (t *taskService) CreateTask(req models.TaskCreateRequest) (*models.Task, er
 	}
 
 	if req.CategoryID != nil {
-		_, err := t.categoryRepo.GetByID(*req.CategoryID)
+		category, err := t.categoryRepo.GetByID(*req.CategoryID)
 		if err == nil {
-			taskCreate.CategoryID = req.CategoryID
+			taskCreate.CategoryID = &category.ID
+		} else {
+			return nil, err
 		}
 	}
 
@@ -61,7 +63,7 @@ func (t *taskService) GetTask(id uint) (*models.Task, error) {
 func (t *taskService) UpdateTask(id uint, req models.TaskUpdateRequest) (*models.Task, error) {
 	task, err := t.taskRepo.GetByID(id)
 	if err != nil {
-		return nil, fmt.Errorf("Task is not found")
+		return nil, fmt.Errorf("Task is not found: %s", err)
 	}
 
 	if req.Title != nil {

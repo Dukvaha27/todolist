@@ -19,7 +19,7 @@ func main() {
 	categoryRepo := repository.NewCategoryRepository(db)
 
 	taskService := services.NewTaskService(taskRepo, categoryRepo)
-	categoryService := services.NewCategoryService(categoryRepo, taskRepo)
+	categoryService := services.NewCategoryService(categoryRepo)
 
 	taskHandler := transport.NewTaskHandler(taskService)
 	categoryHandler := transport.NewCategoryHandler(categoryService)
