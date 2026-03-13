@@ -52,7 +52,7 @@ func (c *CategoryHandler) Delete(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -63,6 +63,6 @@ func (c *CategoryHandler) Delete(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusInternalServerError, "record was deleted successfull")
+	ctx.JSON(http.StatusOK, "record was deleted successfull")
 
 }

@@ -36,7 +36,7 @@ func (c *gormCategoryRepository) GetByID(id uint) (*models.Category, error) {
 
 	result := c.db.First(&category, id)
 
-	if result.Error == gorm.ErrRecordNotFound {
+	if result.Error != nil {
 		return nil, result.Error
 	}
 

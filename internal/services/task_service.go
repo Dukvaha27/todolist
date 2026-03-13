@@ -30,10 +30,6 @@ func NewTaskService(
 }
 
 func (t *taskService) CreateTask(req models.TaskCreateRequest) (*models.Task, error) {
-	if req.Title == "" {
-		return nil, fmt.Errorf("Title is empty")
-	}
-
 	taskCreate := models.Task{
 		Title:       req.Title,
 		Description: req.Description,
